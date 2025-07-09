@@ -1,4 +1,5 @@
 ﻿using geodesy_data_struct.Enum;
+using System.Text.Json.Serialization;
 
 namespace geodesy_data_struct.DataClass
 {
@@ -54,6 +55,14 @@ namespace geodesy_data_struct.DataClass
             Degree = (int)TotalDegree;
             Minute = (int)((TotalDegree - Degree) * 60);
             Second = TotalSecond - Degree * 3600 - Minute * 60;
+        }
+        [JsonConstructor]
+        public Angle(double degree, double minute, double second, double radian, double totalDegree, double totalMinute, double totalSecond) : this(degree, minute, second)
+        {
+            Radian = radian;
+            TotalDegree = totalDegree;
+            TotalMinute = totalMinute;
+            TotalSecond = totalSecond;
         }
         public override string ToString()
         {

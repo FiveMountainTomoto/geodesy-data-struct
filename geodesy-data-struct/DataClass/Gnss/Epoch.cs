@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text.Json.Serialization;
 
 namespace geodesy_data_struct.DataClass.Gnss
 {
@@ -17,6 +13,7 @@ namespace geodesy_data_struct.DataClass.Gnss
         {
             DateTime = new DateTime(year, 1, 1).AddDays(day - 1).AddSeconds(sec);
         }
+        [JsonConstructor]
         public Epoch(DateTime dateTime)
         {
             DateTime = dateTime;
