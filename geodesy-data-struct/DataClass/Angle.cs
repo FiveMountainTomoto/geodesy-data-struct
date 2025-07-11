@@ -88,7 +88,7 @@ namespace geodesy_data_struct.DataClass
             double resTotalSec = angle.TotalSecond / factor;
             return new Angle(resTotalSec, AngleCreaterType.TotalSecond);
         }
-        public Angle GetStandard()
+        private double GetStandardRadian()
         {
             double rad = Radian;
             while (rad < 0)
@@ -99,7 +99,32 @@ namespace geodesy_data_struct.DataClass
             {
                 rad -= 2 * double.Pi;
             }
-            return new Angle(rad);
+            return rad;
+        }
+        public Angle GetStandard()
+        {
+            double stdRad = GetStandardRadian();
+            return new Angle(stdRad);
+        }
+        public AngleQuadrant GetQuadrant()
+        {
+            double stdRad = GetStandardRadian();
+            if (stdRad >= 0 && stdRad < double.Pi / 2)
+            {
+                return AngleQuadrant.I;
+            }
+            else if (stdRad >= double.Pi / 2 && stdRad < double.Pi)
+            {
+                return AngleQuadrant.II;
+            }
+            else if (stdRad >= double.Pi && stdRad < 3 * double.Pi / 2)
+            {
+                return AngleQuadrant.III;
+            }
+            else
+            {
+                return AngleQuadrant.IV;
+            }
         }
     }
 }
