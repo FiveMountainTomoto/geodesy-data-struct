@@ -88,5 +88,18 @@ namespace geodesy_data_struct.DataClass
             double resTotalSec = angle.TotalSecond / factor;
             return new Angle(resTotalSec, AngleCreaterType.TotalSecond);
         }
+        public Angle GetStandard()
+        {
+            double rad = Radian;
+            while (rad < 0)
+            {
+                rad += 2 * double.Pi;
+            }
+            while (rad >= 2 * double.Pi)
+            {
+                rad -= 2 * double.Pi;
+            }
+            return new Angle(rad);
+        }
     }
 }
