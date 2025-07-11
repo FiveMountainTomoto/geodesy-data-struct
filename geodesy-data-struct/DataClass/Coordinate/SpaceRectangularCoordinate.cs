@@ -1,10 +1,5 @@
 ﻿using geodesy_data_struct.Interface;
-using System;
 using static System.Math;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace geodesy_data_struct.DataClass.Coordinate
 {
@@ -25,19 +20,24 @@ namespace geodesy_data_struct.DataClass.Coordinate
         {
             double L = Atan2(Y, X);
             // calculate latitude
-            double p = Sqrt(X * X + Y * Y);
-            double tanB0 = Z / p, 
-                tanB, N;
+            double s = Sqrt((X * X) + (Y * Y));
+            double t0 = Z / s,
+                p = coorSys.C * coorSys.E12 / s,
+                k = 1 + coorSys.E22;
+            double t1 = t0, tanB;
             while (true)
             {
-                double sin2B0 = tanB0 * tanB0 / (1 + tanB0 * tanB0);
-                N = coorSys.A / Sqrt(1 - coorSys.E12 * sin2B0);
-                tanB = (Z + N * coorSys.E12 * Sqrt(sin2B0)) / p;
-                if (Abs(tanB - tanB0) < 1e-12) break;
-                tanB0 = tanB;
+                double t2 = t0 + (p * t1 / Sqrt(k + (t1 * t1)));
+                if (Abs(t2 - t1) < 1e-12)
+                {
+                    tanB = t2;
+                    break;
+                }
+                t1 = t2;
             }
             double B = Atan(tanB);
-            double H = p / Cos(B) - N;
+            double N = coorSys.A / Sqrt(1 - (coorSys.E12 * Sin(B) * Sin(B)));
+            double H = (s / Cos(B)) - N;
             return new()
             {
                 CoordinateSystem = coorSys,
